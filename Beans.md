@@ -203,16 +203,16 @@ There are 2 ways to create beans.
 ```java
 @Service
 public class UserRepository {
-	private final DatabaseConnection db;
+    private final DatabaseConnection db;
 
     @Autowired
-	public UserRepository(DatabaseConnection db) {
-		this.db = db;
-	}
+    public UserRepository(DatabaseConnection db) {
+        this.db = db;
+    }
 
-	public getAllUsers() {
+    public getAllUsers() {
         return this.db.fetch("SELECT * FROM USERS;");
-	}
+    }
 }
 ```
 
@@ -226,7 +226,7 @@ public class ApplicationConfig {
     @Bean
     public DataSource dataSource() {
         return new DataSource("jdbc:mysql://localhost:3306/mydb");
-	}
+    }
 
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
