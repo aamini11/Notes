@@ -85,9 +85,6 @@ It should be noted that dependency injection does incur some downsides.
 1. It makes constructing your application harder. (This is discussed in more detail in the next section)
 2. Dependency injection can make your app more configurable, but overuse of the pattern can lead to unnecessary indirection and complexity
 3. Worse debuggability. What would have been normal compile-time errors now become complex autowire runtime errors with long stack traces.
-
-# Practical DI (How)
-
 ## Manual Dependency Injection
 
 In the previous section, we explained the theory/motivation behind dependency injection and why it sometimes makes sense to inject dependencies. The problem is that if we parameterize an object, now creating that object is harder because there's an extra step of making sure the right dependencies are passed in. Example:
@@ -96,7 +93,8 @@ In the previous section, we explained the theory/motivation behind dependency in
 // Creating a UserRepository class that doesn't use dependency injection is easier.
 UserRepository userRepository = new UserRepository();
 
-// When dependency injection is introduced to UserRepository, now there's the extra step of making sure the right parameters are passed in when trying to create an instance of UserRepository.
+// When dependency injection is introduced to UserRepository, now there's the extra step 
+// of making sure the right parameters are passed in when trying to create an instance of UserRepository.
 DataSource dataSource = new DatabaseConnection("jdbc://localhost:3000/postgres");
 UserRepository userRepository = new UserRepository(dataSource);
 ```
@@ -188,13 +186,13 @@ public class App {
 
 ```
 
-## Spring Framework
+# Practical DI in Spring (How)
 
 Now that we saw what manual dependency injection looks like, there's actually a way to automate this process using dependency injection frameworks like Spring.
-### What are Beans
+## What are Beans
 
 Instead of having to wire all the objects yourself, frameworks like Spring will manage your objects and construct your object graph for you. All the objects managed by Spring are called "beans" and all beans are stored in a central object container called the "IoC container". Beans are allowed to reference other beans as dependencies. Spring will recursively resolve all bean dependencies and create the entire bean object graph for your application.  The actual algorithm for how this is done is very simple. It essentially just does a DFS traversal of your object graph and starts by creating objects that have no dependencies first and works its way up the tree.
-### Creating Beans
+## Creating Beans
 
 There are 2 ways to create beans.
 1. Mark a class with @Component/@Service/@Repository/@Controller (All equivalent). Any class marked with one of those annotations will be considered a bean and one instance of that class will be created and stored in the IoC container by Spring at the start of the app. And because any class marked with @Component is considered a bean, the class can then reference other beans it needs as dependencies inside its constructor and Spring will automatically resolve those beans from the IoC and pass it in. The constructor just needs to be marked with @Autowired. 
