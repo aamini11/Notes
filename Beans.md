@@ -211,7 +211,7 @@ public class UserRepository {
 	}
 
 	public getAllUsers() {
-		return this.db.fetch("SELECT * FROM USERS;");
+        return this.db.fetch("SELECT * FROM USERS;");
 	}
 }
 ```
@@ -223,14 +223,14 @@ public class UserRepository {
 @Configuration
 public class ApplicationConfig {
 
-	@Bean
-	public DataSource dataSource() {
-		return new DataSource("jdbc:mysql://localhost:3306/mydb");
+    @Bean
+    public DataSource dataSource() {
+        return new DataSource("jdbc:mysql://localhost:3306/mydb");
 	}
 
-	@Bean
-	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-		return new SimpleJdbcTemplate(dataSource);
-	}
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+        return new SimpleJdbcTemplate(dataSource);
+    }
 }
 ```
