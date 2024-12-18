@@ -1,6 +1,6 @@
 # Theory (Why)
 
-What is dependency injection? It's simply a way of writing/architecting OOP applications to make them more configurable and easy to test. The idea is that a well written OOP application can be thought of as an organized collection of different helper classes all communicating and working together to accomplish some task. Dependency injection just suggests we make a few tweaks in how our classes are created so that we can make our application more flexible. Below is the exact definition of what dependency injection is. Later we examine what the benefits of applying dependency injection are and how it changes the way we structure our apps.
+What is dependency injection? It's simply a way of writing/architecting OOP applications to make them more configurable and easy to test. The idea is that a well written OOP application can be thought of as an organized collection of different classes/modules all communicating and working together to accomplish different tasks. Dependency injection is just a pattern where we slightly tweak how our classes are constructed so that we can make our application more flexible. Below is the exact definition of what dependency injection is. Later we examine what the benefits of applying dependency injection are and how it changes the way we structure our apps.
 ## Definition 
 
 The definition of dependency injection is simply this: If we have a Class X that relies on code from Class Y to work, then instead of having X create an instance of Y, an instance of Y should be passed in as a parameter to X instead. 
@@ -82,12 +82,12 @@ public TestUserValidation {
 ## Downsides
 
 It should be noted that dependency injection does incur some downsides. 
-1. It makes constructing your application harder. (This is discussed in more detail in the next section)
+1. It makes constructing your application harder which requires the introduction of frameworks like Spring (This is discussed in more detail in later sections)
 2. Dependency injection can make your app more configurable, but overuse of the pattern can lead to unnecessary indirection and complexity
 3. Worse debuggability. What would have been normal compile-time errors now become complex autowire runtime errors with long stack traces.
 ## Manual Dependency Injection
 
-In the previous section, we explained the theory/motivation behind dependency injection and why it sometimes makes sense to inject dependencies. The problem is that if we parameterize an object, now creating that object is harder because there's an extra step of making sure the right dependencies are passed in. Example:
+In the previous section, we explained the theory/motivation behind dependency injection and why it sometimes makes sense to inject dependencies. The problem is that if we parameterize an object to use dependency injection, now creating that object is harder because there's an extra step of making sure the right dependencies are passed in. Example:
 
 ```java
 // Creating a UserRepository class that doesn't use dependency injection is easier.
@@ -188,7 +188,7 @@ public class App {
 
 # Practical DI in Spring (How)
 
-Now that we saw what manual dependency injection looks like, there's actually a way to automate this process using dependency injection frameworks like Spring.
+Now that we learned the theory/motivation behind dependency injection and saw what manual dependency injection looks like, we now look at practical dependency injection in Spring. Frameworks like Spring actually automate the process of wiring objects and creating the application's object graph. We just need to introduce a few Spring annotations to our code and learn what beans are.
 ## What are Beans
 
 Instead of having to wire all the objects yourself, frameworks like Spring will manage your objects and construct your object graph for you. All the objects managed by Spring are called "beans" and all beans are stored in a central object container called the "IoC container". Beans are allowed to reference other beans as dependencies. Spring will recursively resolve all bean dependencies and create the entire bean object graph for your application.  The actual algorithm for how this is done is very simple. It essentially just does a DFS traversal of your object graph and starts by creating objects that have no dependencies first and works its way up the tree.
