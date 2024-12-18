@@ -58,9 +58,9 @@ class DiscordCrosswordBot {
     }
 
     public void onMessage(String text) {
-	    // Complex logic to determine winner
-	    // ...
-	    this.server.sendMessage("Congrats $WINNER");
+        // Complex logic to determine winner
+        // ...
+        this.server.sendMessage("Congrats $WINNER");
     }
 }
 
@@ -70,8 +70,8 @@ public TestUserValidation {
     @Test
     public void testWithGoodUser() {
 	    // Inject a mocked DiscordServer dependency
-	    DiscordServer mockServer = mock(DiscordServer.class);
-	    DiscordCrosswordBot crosswordBot = new DiscordCrosswordBot(mockServer);
+        DiscordServer mockServer = mock(DiscordServer.class);
+        DiscordCrosswordBot crosswordBot = new DiscordCrosswordBot(mockServer);
 
         // Run code.
         crosswordBot.onMessage("...A sample crossword result");
