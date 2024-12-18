@@ -86,7 +86,7 @@ It should be noted that dependency injection does incur some downsides.
 2. Dependency injection can make your app more configurable, but overuse of the pattern can lead to unnecessary indirection and complexity
 3. Worse debuggability. What would have been normal compile-time errors now become complex autowire runtime errors with long stack traces.
 
-# Using DI in Spring (Application)
+# Practical DI (How)
 
 ## Manual Dependency Injection
 
