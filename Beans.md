@@ -8,32 +8,32 @@ The definition of dependency injection is simply this: If we have a Class X that
 Example **WITHOUT** dependency injection:
 ```java
 public class UserRepository {
-	private final DatabaseConnection db;
+    private final DatabaseConnection db;
 
     // BAD: WITHOUT DEPENDENCY INJECTION
-	public UserRepository() {
-		this.db = new DatabaseConnection("jdbc://localhost:3000/postgres");
-	}
+    public UserRepository() {
+        this.db = new DatabaseConnection("jdbc://localhost:3000/postgres");
+    }
 
 	public getAllUsers() {
-		return this.db.fetch("SELECT * FROM USERS;");
-	}
+        return this.db.fetch("SELECT * FROM USERS;");
+    }
 }
 ```
 
 Example **WITH** dependency injection:
 ```java
 public class UserRepository {
-	private final DatabaseConnection db;
+    private final DatabaseConnection db;
 
     // GOOD: WITH DEPENDENCY INJECTION
 	public UserRepository(DatabaseConnection db) {
-		this.db = db;
-	}
+        this.db = db;
+    }
 
 	public getAllUsers() {
-		return this.db.fetch("SELECT * FROM USERS;");
-	}
+        return this.db.fetch("SELECT * FROM USERS;");
+    }
 }
 ```
 ## Benefits
@@ -49,34 +49,34 @@ At first it might not seem clear what the benefits of such a simple change are. 
 // Class we want to test.
 class DiscordCrosswordBot {
 
-	private final DiscordServer server;
-	
-	public DiscordCrosswordBot(DiscordServer server) {
-		this.server = server;
-	}
-	
-	public void onMessage(String text) {
-		// Complex logic to determine winner
-		// ...
-		this.server.sendMessage("Congrats $WINNER");
-	}
+    private final DiscordServer server;
+
+    public DiscordCrosswordBot(DiscordServer server) {
+        this.server = server;
+    }
+
+    public void onMessage(String text) {
+	    // Complex logic to determine winner
+	    // ...
+	    this.server.sendMessage("Congrats $WINNER");
+    }
 }
 
 // Test code
 public TestUserValidation {
 
-	@Test
-	public void testWithGoodUser() {
-		// Inject a mocked DiscordServer dependency
-		DiscordServer mockServer = mock(DiscordServer.class);
-		DiscordCrosswordBot crosswordBot = new DiscordCrosswordBot(mockServer);
+    @Test
+    public void testWithGoodUser() {
+	    // Inject a mocked DiscordServer dependency
+	    DiscordServer mockServer = mock(DiscordServer.class);
+	    DiscordCrosswordBot crosswordBot = new DiscordCrosswordBot(mockServer);
 
-		// Run code.
-		crosswordBot.onMessage("...A sample crossword result");
-		
-		// Assert that the sendMessage() method was called once and it was passed in the right value.
-		verify(mockServer, times(1)).sendMessage("Congrats Aria!");
-	}
+        // Run code.
+        crosswordBot.onMessage("...A sample crossword result");
+
+        // Assert that the sendMessage() method was called once and it was passed in the right value.
+        verify(mockServer, times(1)).sendMessage("Congrats Aria!");
+    }
 }
 ```
 ## Downsides
