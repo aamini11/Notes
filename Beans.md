@@ -69,7 +69,7 @@ public TestUserValidation {
 
     @Test
     public void testWithGoodUser() {
-	    // Inject a mocked DiscordServer dependency
+        // Inject a mocked DiscordServer dependency
         DiscordServer mockServer = mock(DiscordServer.class);
         DiscordCrosswordBot crosswordBot = new DiscordCrosswordBot(mockServer);
 
