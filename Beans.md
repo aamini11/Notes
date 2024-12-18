@@ -1,6 +1,6 @@
 # Theory (Why)
 
-What is dependency injection? It's simply a way of writing/architecting OOP applications to make them more configurable and easy to test. The idea is that a well written OOP application can be thought of as an organized collection of different classes all communicating and working together. This graph of interconnected objects makes up the backbone of your application. Dependency injection is just a pattern where we slightly tweak how this object graph is constructed which makes our application more flexible and configurable. Later, we examine what the benefits of applying dependency injection are and how it changes the way we structure our apps.
+What is dependency injection? It's simply a way of writing/architecting OOP applications to make them more configurable and easy to test. At a high level, it makes it so we can easily swap out different chunks of code for different situations. But applying dependency injection to our application means having to slightly restructure how we construct some classes in our application. 
 ## Definition 
 
 The definition of dependency injection is simply this: If we have a Class X that relies on code from Class Y to work, then instead of having X create an instance of Y, an instance of Y should be passed in as a parameter to X instead. 
@@ -40,15 +40,15 @@ public class UserRepository {
 ```
 ## Benefits
 
-At first it might not seem clear what the benefits of such a simple change are. But basically, it makes it so that you can easily swap in different instances of objects depending on the context your app is running. The 2 most common scenarios are:
+At first it might not seem clear what the benefits of such a simple change are. But basically, it makes it so that you can easily swap in different instances of objects depending what environment your app is running. The 2 most common scenarios are:
 
-1. We want the ability to pass in different objects depending on if we're in dev vs prod. For example, in the first UserRepository code above, the database object we use is hardcoded so there's no easy way to swap out which database we talk to. In the second example, since the database dependency is parameterized, we have the flexibility to pass in different connections depending on if we're in dev vs prod.
+1. Passing in different objects depending on if we're in dev vs prod. For example, in the UserRepository code above, the first database object is hardcoded so there's no way to change to a dev server. When dependency injection is introduced, we then have the flexibility to pass in different databases objects depending on if we're in dev vs prod.
 2. Passing in mock objects when unit testing. Having all dependencies parameterized gives us the ability to pass in mock objects so we can isolate testing to only the class we want to test and not its dependencies.
    
    Example:
    
 ```java
-// Class we want to test.
+// Example class we want to unit test.
 class DiscordCrosswordBot {
 
     private final DiscordServer server;
@@ -64,17 +64,17 @@ class DiscordCrosswordBot {
     }
 }
 
-// Test code
+// The Unit Test
 public TestUserValidation {
 
     @Test
     public void testWithGoodUser() {
-        // Inject a mocked DiscordServer dependency
+        // Inject a mocked DiscordServer
         DiscordServer mockServer = mock(DiscordServer.class);
         DiscordCrosswordBot crosswordBot = new DiscordCrosswordBot(mockServer);
 
         // Run code.
-        crosswordBot.onMessage("...A sample crossword result");
+        crosswordBot.onMessage("...A sample crossword result where Aria Wins");
 
         // Assert that the sendMessage() method was called once and it was passed in the right value.
         verify(mockServer, times(1)).sendMessage("Congrats Aria!");
@@ -95,8 +95,8 @@ In the previous section, we explained the theory/motivation behind dependency in
 // Creating a UserRepository class that doesn't use dependency injection is easier.
 UserRepository userRepository = new UserRepository();
 
-// When dependency injection is introduced to UserRepository, now there's the extra step 
-// of making sure the right parameters are passed in when trying to create an instance of UserRepository.
+// When dependency injection is introduced, there's now the extra step of having 
+// to create a database object and then pass it into the UserRepository constructor
 DataSource dataSource = new DatabaseConnection("jdbc://localhost:3000/postgres");
 UserRepository userRepository = new UserRepository(dataSource);
 ```
