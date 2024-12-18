@@ -8,6 +8,7 @@ The definition of dependency injection is simply this: If we have a Class X that
 Example **WITHOUT** dependency injection:
 ```java
 public class UserRepository {
+
     private final DatabaseConnection db;
 
     // BAD: WITHOUT DEPENDENCY INJECTION
@@ -15,7 +16,7 @@ public class UserRepository {
         this.db = new DatabaseConnection("jdbc://localhost:3000/postgres");
     }
 
-	public getAllUsers() {
+    public getAllUsers() {
         return this.db.fetch("SELECT * FROM USERS;");
     }
 }
@@ -24,14 +25,15 @@ public class UserRepository {
 Example **WITH** dependency injection:
 ```java
 public class UserRepository {
+
     private final DatabaseConnection db;
 
     // GOOD: WITH DEPENDENCY INJECTION
-	public UserRepository(DatabaseConnection db) {
+    public UserRepository(DatabaseConnection db) {
         this.db = db;
     }
 
-	public getAllUsers() {
+    public getAllUsers() {
         return this.db.fetch("SELECT * FROM USERS;");
     }
 }
