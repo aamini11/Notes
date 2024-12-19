@@ -65,10 +65,10 @@ class DiscordCrosswordBot {
 }
 
 // The Unit Test
-public TestUserValidation {
+public DiscordCrosswordBotTest {
 
     @Test
-    public void testWithGoodUser() {
+    public void testGameWhereAriaWins() {
         // Inject a mocked DiscordServer
         DiscordServer mockServer = mock(DiscordServer.class);
         DiscordCrosswordBot crosswordBot = new DiscordCrosswordBot(mockServer);
