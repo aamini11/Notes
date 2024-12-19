@@ -48,36 +48,70 @@ At first it might not seem clear what the benefits of such a simple change are. 
    Example:
    
 ```java
-// Example class we want to unit test.
-class DiscordCrosswordBot {
+// Example class we want to unit test. 
+// We show how introducing dependency injection into BankService makes it easier to test.
+public class BankService {
 
-    private final DiscordServer server;
+    private final BankDb bankDb;
 
-    public DiscordCrosswordBot(DiscordServer server) {
-        this.server = server;
+    public BankService(BankDb bankDb) {
+        this.bankDb = bankDb;
     }
 
-    public void onMessage(String text) {
-        // Complex logic to determine winner
-        // ...
-        this.server.sendMessage("Congrats $WINNER");
+    /**
+     * Transfers money between two accounts if the source has sufficient funds.
+     * Returns true if successful, false if insufficient funds.
+     */
+    public boolean transfer(String fromAccount, String toAccount, double amount) {
+        double fromBalance = bankDb.getBalance(fromAccount);
+        if (fromBalance < amount) {
+            return false;
+        }
+
+        double toBalance = bankDb.getBalance(toAccount);
+
+        // Update balances in the database
+        bankDb.updateBalance(fromAccount, fromBalance - amount);
+        bankDb.updateBalance(toAccount, toBalance + amount);
+        return true;
     }
 }
 
 // The Unit Test
-public DiscordCrosswordBotTest {
+public class BankServiceTest {
 
     @Test
-    public void testGameWhereAriaWins() {
-        // Inject a mocked DiscordServer
-        DiscordServer mockServer = mock(DiscordServer.class);
-        DiscordCrosswordBot crosswordBot = new DiscordCrosswordBot(mockServer);
+    public void testSuccessfulTransfer() {
+        BankDb mockDb = Mockito.mock(BankDb.class);
+        when(mockDb.getBalance("X")).thenReturn(100.0);
+        when(mockDb.getBalance("Y")).thenReturn(50.0);
 
-        // Run code.
-        crosswordBot.onMessage("...A sample crossword result where Aria Wins");
+        // Inject mocked DB.
+        BankService service = new BankService(mockDb);
 
-        // Assert that the sendMessage() method was called once and it was passed in the right value.
-        verify(mockServer, times(1)).sendMessage("Congrats Aria!");
+        // Execute the transfer
+        boolean result = service.transfer("X", "Y", 40.0);
+
+		// Verify
+        assertTrue(result);
+        verify(mockDb).updateBalance("X", 60.0);
+        verify(mockDb).updateBalance("Y", 90.0);
+    }
+
+    @Test
+    public void testInsufficientFunds() {
+        BankDb mockDb = Mockito.mock(BankDb.class);
+        when(mockDb.getBalance("X")).thenReturn(20.0);
+        when(mockDb.getBalance("Y")).thenReturn(50.0);
+
+        BankService service = new BankService(mockDb);
+
+        // Attempt to transfer 40.0, which should fail
+        boolean result = service.transfer("X", "Y", 40.0);
+        
+        // Verify that balances were NOT updated because the transfer failed
+        assertFalse(result);
+        verify(mockDb, never()).updateBalance(anyString(), anyDouble());
     }
 }
 ```
